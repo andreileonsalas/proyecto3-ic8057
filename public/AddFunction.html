@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de funciones</title>
+    <link rel="stylesheet" href="stylesheets/alerts.css">
+    <script>
+        /* To block when user try to enter to addFuntion from address bar */
+        if (localStorage.getItem('usuario') == null) {
+            window.location.href = "index.html"
+        }
+    </script>
+    <script type="module">
+        import * as importador from "./proyecto3.mjs";
+        window.importador = importador;
+        window.upload_function = async (user, name, description, category, js) => {
+            var inserted = await importador.addFunction({
+                "user": user,
+                "name": name, /* Function name */
+                "description": description,
+                "category": category,
+                "js": js
+            });
+            return inserted; // true or false
+        }
+    </script>
+    <script>
+        /* receives: 'alert', 'alert success', 'alert info' */
+        function showAlert(alert_type, msg) {
+            /* alert data */
+            const alert = document.getElementById('alert');
+            document.getElementById('msg').innerText = msg;
+            alert.setAttribute('class', alert_type);
+            alert.style.opacity = "1";
+
+            /* waits 4 seconds and close it automatically */
+            setTimeout(() => { closeAlert() }, 4000);
+        }
+
+        function closeAlert() {
+            const alert = document.getElementById('alert');
+            alert.style.opacity = "0";
+        }
+
+        async function validateAndInsert() {
+            var user = localStorage.getItem('usuario'); // Gets user from localstorage
+            var name = document.getElementById('f_name').value.trim();
+            var description = document.getElementById('f_description').value.trim();
+            var category = document.getElementById('f_category').value.trim();
+            var js = document.getElementById('js_code').value.trim();
+
+            if (name === "" || description === "" || category === "" || js === "") {
+                showAlert('alert info', 'Faltan valores');
+                return;
+            }
+            // validates if javascript code is correctly written
+            var valid = importador.validarFuncion(js);
+            if (valid) {
+                // inserts
+                var inserted = await upload_function(user, name, description, category, js);
+                if (inserted) {
+                    showAlert('alert success', 'Función registrada correctamente!');
+                    clear_inputs();
+                } else {
+                    showAlert('alert', 'Ocurrió un error al insertar');
+                }
+            } else {
+                showAlert('alert warning', 'El método tiene errores semánticos!');
+            }
+        }
+
+        function autocomplete() {
+            document.getElementById('f_name').value = 'fibonacci';
+            document.getElementById('f_description').value = 'Función matemática Fibonacci';
+            document.getElementById('f_category').value = 'Matemáticas';
+            document.getElementById('js_code').value =
+                `function fibonacci() {
+    const number = parseInt(prompt('Enter the number of terms: '));
+    let n1 = 0, n2 = 1, nextTerm;
+
+    console.log('Fibonacci Series:');
+
+    for (let i = 1; i <= number; i++) {
+        console.log(n1);
+        nextTerm = n1 + n2;
+        n1 = n2;
+        n2 = nextTerm;
+    }\n}`;
+        }
+
+        function clear_inputs() {
+            document.getElementById('f_name').value = '';
+            document.getElementById('f_description').value = '';
+            document.getElementById('f_category').value = '';
+            document.getElementById('js_code').value = "";
+        }
+
+        function goBack() {
+            window.location.href = '/Menu.html';
+        }
+    </script>
+
+    <!-- Button styles -->
+    <style>
+        .button {
+            position: relative;
+            background-color: #c9cc24;
+            border: none;
+            font-size: 22px;
+            border-radius: 6px;
+            color: #632544;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .button:after {
+            content: "";
+            background: #f1f1f1;
+            display: block;
+            position: absolute;
+            padding-top: 300%;
+            padding-left: 350%;
+            margin-left: -20px !important;
+            margin-top: -120%;
+            opacity: 0;
+            transition: all 0.8s
+        }
+
+        .button:active:after {
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: 0s
+        }
+    </style>
+
+    <!-- Input tyles -->
+    <style>
+        input[type=text] {
+            width: 100%;
+            padding: 10px 20px;
+            margin: 7px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: azure;
+        }
+
+        .div_form {
+            width: 90%;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        h1,
+        label {
+            color: #c9cc24;
+        }
+
+        textarea {
+            width: 750px;
+            height: 350px;
+            background-attachment: local;
+            background-repeat: no-repeat;
+            padding-left: 30px;
+            padding-top: 10px;
+            border-color: rgb(52, 205, 240);
+            background-color: azure;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            background: #092756;
+            background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -moz-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -moz-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -webkit-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -webkit-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -o-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -o-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -ms-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -ms-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), linear-gradient(to bottom, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), linear-gradient(135deg, #670d10 0%, #092756 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3E1D6D', endColorstr='#092756', GradientType=1);
+        }
+    </style>
+</head>
+
+<body style="background-color: #f2f2f2ba;">
+    <View style="display: flex;">
+        <h1>Registro de funciones</h1>
+        <button class="button" style="margin-left: 5%;" onclick="goBack()">Volver a menu</button>
+    </View>
+    
+    <br>
+    <!-- JavaScript editor -->
+    <textarea id="js_code" style="font-size: 12px; width: 90%; height: 310px; margin-left: 1%;"
+        placeholder='/* Write your js function here */'></textarea>
+
+    <div class='div_form'>
+        <form>
+            <label for="fname">Nombre de la función</label>
+            <input type="text" id="f_name" name="name" placeholder="...">
+
+            <label for="lname">Descripción de lo que hace la función</label>
+            <input type="text" id="f_description" name="lastname" placeholder="...">
+
+            <label for="lname">Categoría</label>
+            <input type="text" id="f_category" name="lastname" placeholder="Ejemplo, matemáticas, cadenas...">
+
+        </form>
+        <!-- Alert component -->
+        <div id='alert' class="alert" style="opacity: 0;">
+            <span class="closebtn" onclick="closeAlert()">&times;</span>
+            <strong id='msg'>Success! Indicates a successful or positive action.</strong>
+        </div>
+        <button class="button" onclick="validateAndInsert()">Guardar</button>
+        <button class="button" onclick="autocomplete()">Autocompletar</button>
+    </div>
+
+</body>
+
+</html>

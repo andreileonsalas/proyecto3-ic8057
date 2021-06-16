@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mi pagina web</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/alerts.css">
+    <script type="module">
+        import * as importador from "./proyecto3.mjs";
+
+        window.validate_user = async (user, pass) => {
+            var valid = await importador.validateUser({
+                "user": user,
+                "pass": pass
+            });
+            return valid; // true or false
+        }
+    </script>
+    <script>
+        async function validar() {
+            const user = document.getElementById('user').value.trim();
+            const pass = document.getElementById('pass').value.trim();
+            if (user === '' || pass === '') {
+                showAlert('alert info', 'Campos incompletos!');
+                return;
+            }
+            const json = await validate_user(user, pass);
+            if (!json.valid) {
+                showAlert('alert warning', 'Usuario o contraseña incorrectos!');
+            } else {
+                // save username into localstorage
+                localStorage.setItem('usuario', user);
+                // localStorage.removeItem('usuario'); // --> remove user from localstorage
+                // var u = localStorage.getItem('usuario'); // --> get user from localstorage
+                // send to menu
+                window.location.href = "Menu.html"
+            }
+        }
+
+        /* receives: 'alert', 'alert success', 'alert info' */
+        function showAlert(alert_type, msg) {
+            /* sets alert data */
+            const alert = document.getElementById('alert');
+            document.getElementById('msg').innerText = msg;
+            alert.setAttribute('class', alert_type);
+            alert.style.opacity = "1";
+
+            /* waits 5 seconds and close it automatically */
+            setTimeout(() => { closeAlert() }, 5000);
+        }
+
+        function closeAlert() {
+            const alert = document.getElementById('alert');
+            alert.style.opacity = "0";
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+
+    <!-- Alert component -->
+    <div id='alert' class="alert" style="opacity: 0;">
+        <span class="closebtn" onclick="closeAlert()">&times;</span>
+        <strong id='msg'>Success! Indicates a successful or positive action.</strong>
+    </div>
+
+    <div class="login">
+        <h1>Login</h1>
+        <form method="post">
+            <input id='user' type="text" name="u" placeholder="Username" required="required" />
+            <input id='pass' type="password" name="p" placeholder="Password" required="required" />
+
+            <input class="btn btn-primary btn-block btn-large" onclick="validar()" value="Ingresar">
+            <a class="btn btn-primary btn-block btn-large" href="registrarse.html">Registrarse</a>
+            <a class="btn btn-primary btn-block btn-large" href="buscar.html">Buscar función</a>
+            <a class="btn btn-primary btn-block btn-large" href="apidoc/index.html">Documentacion interna</a>
+            <a class="btn btn-primary btn-block btn-large" href="out/index.html">Documentacion del modulo</a>
+        </form>
+
+    </div>
+    <br>
+
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mi pagina web</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="registrarse_style.css">
+
+    <style>
+        p {
+            color: red;
+            background-color: black;
+        }
+
+        .js {
+            color: green;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <main>
+        <h1>Buscar funcion</h1>
+        <div id="Buscadores">
+            <label for="buscarFuncionCategoria">Buscar Funcion por Categoría</label>
+            <input id="buscarFuncionCategoria" value="buscarFuncionCategoria" name="buscar" type="radio" required=""
+                checked="checked">
+            <hr>
+            <label for="buscarFuncionUsuario">Buscar Funcion por Usuario</label>
+            <input id="buscarFuncionUsuario" value="buscarFuncionUsuario" name="buscar" type="radio" required="">
+            <hr>
+            <label for="buscarFuncionNombre">Buscar Funcion por Nombre de funcion</label>
+            <input id="buscarFuncionNombre" value="buscarFuncionNombre" name="buscar" type="radio" required="">
+            <hr>
+            <span style="font-size: x-large; color: white;">Texto a buscar: </span>
+            <input style="font-size: x-large; color:black" id="buscarText" value="" name="buscarText" type="text"
+                required="">
+
+            <button class="btn btn-primary btn-large" onclick="buscar()">Buscar</button>
+            <button class="btn btn-primary btn-large" onclick="window.location.href='Menu.html'">Menu Principal</button>
+        </div>
+    </main>
+    <h2>Resultados: </h2>
+    <hr>
+    <div id="resultados">
+
+    </div>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <script type="module">
+        import * as importador from "./proyecto3.mjs";
+        let props = [
+            {
+                "id": 1,
+                "name": "sumar",
+                "description": "Suma dos valores",
+                "category": "matemáticas",
+                "js": "function sumar(a,b){return (a+b)}"
+            },
+            {
+                "id": 2,
+                "name": "restar",
+                "description": "Resta a - b",
+                "category": "matemáticas",
+                "js": "function restar(a,b){return (a-b)}"
+            },
+            {
+                "id": 3,
+                "name": "concatenar",
+                "description": "Concatena strings",
+                "category": "Cadenas",
+                "js": "function concatenar(a,b){return (a+b)}"
+            },
+            {
+                "id": 4,
+                "name": "incrementar",
+                "description": "Incrementa el valor recibido",
+                "category": "Matemáticas",
+                "js": "(a,b)=>return(a+1)"
+            }
+        ]
+
+        window.buscar = async () => {
+            console.log('buscando')
+            if (document.getElementById('buscarFuncionUsuario').checked) {
+                document.getElementById('resultados').innerHTML = ''
+                let funcionesAImprimir = await importador.getUserFunctions({
+                    user: document.getElementById('buscarText').value
+                })
+                funcionesAImprimir.forEach((element) => {
+                    var funciones = document.createElement("div"); // Create a <a> element
+                    let name = document.createElement('h2')
+                    let name2 = document.createTextNode(element.name)
+                    name.appendChild(name2);
+                    let js = document.createElement('p')
+                    js.innerHTML = element.js
+                    let categoria = document.createElement('h3')
+                    let categoria2 = document.createTextNode(element.category)
+                    categoria.appendChild(categoria2)
+                    let descripcion = document.createElement('span')
+                    descripcion.textContent = element.description
+
+                    let usuario = document.createElement('h3')
+                    let usuario2 = document.createTextNode(element.user)
+                    usuario.appendChild(usuario2);
+
+
+                    name.className = 'nombre'
+                    descripcion.className = 'descripcion'
+                    categoria.className = 'categoria'
+                    js.className = 'js'
+                    usuario.className = 'usuario'
+                    funciones.appendChild(name)
+                    funciones.appendChild(usuario)
+                    funciones.appendChild(descripcion)
+                    funciones.appendChild(categoria)
+                    funciones.appendChild(js)
+
+                    funciones.classList.add("gridItem"); //add class gridItem
+                    document.getElementById('resultados').appendChild(funciones); // le agrega al div de presentacion el nuevo div o link 'a'
+
+                });
+            }
+            if (document.getElementById('buscarFuncionNombre').checked) {
+                document.getElementById('resultados').innerHTML = ''
+                let funcionesAImprimir = await importador.getFunction({
+                    name: document.getElementById('buscarText').value
+                })
+                funcionesAImprimir.forEach((element) => {
+                    var funciones = document.createElement("div"); // Create a <a> element
+                    let name = document.createElement('h2')
+                    let name2 = document.createTextNode(element.name)
+                    name.appendChild(name2);
+                    let js = document.createElement('p')
+                    js.innerHTML = element.js
+                    let categoria = document.createElement('h3')
+                    let categoria2 = document.createTextNode(element.category)
+                    categoria.appendChild(categoria2)
+                    let descripcion = document.createElement('span')
+                    descripcion.textContent = element.description
+
+                    let usuario = document.createElement('h3')
+                    let usuario2 = document.createTextNode(element.user)
+                    usuario.appendChild(usuario2);
+
+
+                    name.className = 'nombre'
+                    descripcion.className = 'descripcion'
+                    categoria.className = 'categoria'
+                    js.className = 'js'
+                    usuario.className = 'usuario'
+                    funciones.appendChild(name)
+                    funciones.appendChild(usuario)
+                    funciones.appendChild(descripcion)
+                    funciones.appendChild(categoria)
+                    funciones.appendChild(js)
+
+                    funciones.classList.add("gridItem"); //add class gridItem
+                    document.getElementById('resultados').appendChild(funciones); // le agrega al div de presentacion el nuevo div o link 'a'
+
+                });
+            }
+            if (document.getElementById('buscarFuncionCategoria').checked) {
+                document.getElementById('resultados').innerHTML = ''
+                let funcionesAImprimir = await importador.getCategoryFunctions({
+                    category: document.getElementById('buscarText').value
+                })
+                funcionesAImprimir.forEach((element) => {
+                    var funciones = document.createElement("div"); // Create a <a> element
+                    let name = document.createElement('h2')
+                    let name2 = document.createTextNode(element.name)
+                    name.appendChild(name2);
+                    let js = document.createElement('p')
+                    js.innerHTML = element.js
+                    let categoria = document.createElement('h3')
+                    let categoria2 = document.createTextNode(element.category)
+                    categoria.appendChild(categoria2)
+                    let descripcion = document.createElement('span')
+                    descripcion.textContent = element.description
+
+                    let usuario = document.createElement('h3')
+                    let usuario2 = document.createTextNode(element.user)
+                    usuario.appendChild(usuario2);
+
+
+                    name.className = 'nombre'
+                    descripcion.className = 'descripcion'
+                    categoria.className = 'categoria'
+                    js.className = 'js'
+                    usuario.className = 'usuario'
+                    funciones.appendChild(name)
+                    funciones.appendChild(usuario)
+                    funciones.appendChild(descripcion)
+                    funciones.appendChild(categoria)
+                    funciones.appendChild(js)
+
+                    funciones.classList.add("gridItem"); //add class gridItem
+                    document.getElementById('resultados').appendChild(funciones); // le agrega al div de presentacion el nuevo div o link 'a'
+
+                });
+            }
+        }
+
+        var random = async () => {
+            document.getElementById('resultados').innerHTML = ''
+            let funcionesAImprimir = await importador.getUserFunctions({
+                user: 'andreileonsalas'
+            })
+            funcionesAImprimir.forEach((element) => {
+                var funciones = document.createElement("div"); // Create a <a> element
+                let name = document.createElement('h2')
+                let name2 = document.createTextNode(element.name)
+                name.appendChild(name2);
+                let js = document.createElement('p')
+                js.disabled = true
+                js.value = element.js
+                let categoria = document.createElement('h3')
+                let categoria2 = document.createTextNode(element.category)
+                categoria.appendChild(categoria2)
+                let descripcion = document.createElement('span')
+                descripcion.textContent = element.description
+                name.className = 'nombre'
+                descripcion.className = 'descripcion'
+                categoria.className = 'categoria'
+                js.className = 'js'
+                funciones.appendChild(name)
+                funciones.appendChild(descripcion)
+                funciones.appendChild(categoria)
+                funciones.appendChild(js)
+
+
+                funciones.classList.add("gridItem"); //add class gridItem
+                document.getElementById('resultados').appendChild(funciones); // le agrega al div de presentacion el nuevo div o link 'a'
+
+            });
+        }
+        const node = document.getElementById("buscarText");
+        node.addEventListener("keyup", function (event) {
+            if (event.key === "Enter") {
+                buscar()
+            }
+        });
+        //random()
+
+
+        // var seimporto = await importador.addUser({
+        //     name:"andrei",
+        //     lastname:"Leon",
+        //     user:"andreileonsalas",
+        //     pass:"andrei"
+        // })
+        // console.log(seimporto)
+
+        // var seimporto2 = await importador.addFunction({
+        //     user:"andreileonsalas",
+        //     name:"sumar",
+        //     description:"hace sumas",
+        //     category:"matematicas",
+        //     js:"function sumar(a,b){return (a+b)}"
+        // })
+        // console.log(seimporto2)
+
+        // var seimporto3 = await importador.getUserFunctions({
+        //     user:"andreileonsalas2"
+        // })
+        // console.log(seimporto3)
+
+        // var validarUsuario = await importador.validateUser({
+        //      user:"andreileonsalas",
+        //      pass:"andrei"
+        //  })
+        //  console.log(validarUsuario.valid)
+
+        //ejemplo importar funciones de un usuario de forma externa
+        // var seimporto4 = await importador.importadorDeFunciones(props,'andreileonsalas')
+        // console.log(seimporto4)
+
+
+        // var seimporto5 = await importador.getFunction({
+        //     name: "restar"
+        // })
+        // console.log(seimporto5)
+
+        // var seimporto6 = await importador.getMultipleFunctions(props)
+        // console.log(seimporto6)
+
+        // window.funciones =  await importador.getUserFunctions({
+        //     user:"andreileonsalas"
+        // })
+        // let importadorInstanciado = {}
+        // window.funciones.forEach(element => {
+        //     importadorInstanciado[element.Nombre] = element.js
+        // });
+        // window.importadorInstanciado = seimporto6;
+
+
+    </script>
+</body>
+
+</html>
